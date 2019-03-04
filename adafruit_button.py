@@ -63,8 +63,21 @@ class Button():
         self.width = width
         self.height = height
         self._font = label_font
-
+        self._selected = False
         self.group = displayio.Group()
+
+        self.fill_color = fill_color
+        self.outline_color = outline_color
+        self.label_color = label_color
+        # Selecting inverts the button colors!
+        self.selected_fill = selected_fill
+        self.selected_outline = selected_outline
+        self.selected_label = selected_label
+
+        if self.selected_fill is None and fill_color is not None:
+            self.selected_fill = (~fill_color) & 0xFFFFFF
+        if self.selected_outline is None and outline_color is not None:
+            self.selected_outline = (~outline_color) & 0xFFFFFF
 
         if outline_color or fill_color:
             self.body = self.shadow = None
@@ -99,7 +112,10 @@ class Button():
             self.label.y = y + (height - dims[3])
             self.label.color = label_color
             self.group.append(self.label)
-            print(dims)
+
+            if self.selected_label is None and label_color is not None:
+                self.selected_label = (~label_color) & 0xFFFFFF
+            #print(dims)
 
         """
         #else: # ok just a bounding box
@@ -108,12 +124,21 @@ class Button():
         """
 
     @property
-    def select(self):
+    def selected(self):
         return self._selected
 
-    @select.setter
-    def select(self, value):
-        self._selected = not self._selected
+    @selected.setter
+    def selected(self, value):
+        if value != self._selected:
+            self._selected = value
+        if self._selected:
+            self.body.fill = self.selected_fill
+            self.body.outline = self.selected_outline
+            self.label.color = self.selected_label
+        else:
+            self.body.fill = self.fill_color
+            self.body.outline = self.outline_color
+            self.label.color = self.label_color
 
     def contains(self, point):
         return (self.x <= point[0] <= self.x+self.width) and (self.y <= point[1] <= self.y+self.height)
