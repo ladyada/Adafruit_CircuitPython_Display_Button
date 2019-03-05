@@ -53,7 +53,7 @@ class Button():
     ROUNDRECT = const(1)
     SHADOWRECT = const(2)
     SHADOWROUNDRECT = const(3)
-    def __init__(self, *, x, y, width, height, style=RECT,
+    def __init__(self, *, x, y, width, height, name=None, style=RECT,
                  fill_color=0xFFFFFF, outline_color=0x0,
                  label=None, label_font=None, label_color=0x0,
                  selected_fill=None, selected_outline=None,
@@ -65,6 +65,7 @@ class Button():
         self._font = label_font
         self._selected = False
         self.group = displayio.Group()
+        self.name = name
 
         self.fill_color = fill_color
         self.outline_color = outline_color
@@ -101,7 +102,7 @@ class Button():
                 self.group.append(self.shadow)
             self.group.append(self.body)
 
-        if label:   # button with text label
+        if label and (label_color is not None):   # button with text label
             if not label_font:
                 raise RuntimeError("Please provide label font")
             dims = label_font.text_bounding_box(label)
