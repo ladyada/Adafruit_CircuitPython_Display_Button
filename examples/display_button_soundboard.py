@@ -1,6 +1,4 @@
 import time
-import board
-import displayio
 from adafruit_pyportal import PyPortal
 from adafruit_button import Button
 
