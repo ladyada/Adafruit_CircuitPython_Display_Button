@@ -1,10 +1,7 @@
-import time
+import os
 import board
 import displayio
-import os
-from adafruit_display_text.text_area import TextArea
 from adafruit_bitmap_font import bitmap_font
-from adafruit_display_shapes.rect import Rect
 from adafruit_button import Button
 import adafruit_touchscreen
 
@@ -17,8 +14,8 @@ ts = adafruit_touchscreen.Touchscreen(board.TOUCH_XL, board.TOUCH_XR,
 
 # the current working directory (where this file is)
 cwd = ("/"+__file__).rsplit('/', 1)[0]
-fonts =  [file for file in os.listdir(cwd+"/fonts/")
-          if (file.endswith(".bdf") and not file.startswith("._"))]
+fonts = [file for file in os.listdir(cwd+"/fonts/")
+         if (file.endswith(".bdf") and not file.startswith("._"))]
 for i, filename in enumerate(fonts):
     fonts[i] = cwd+"/fonts/"+filename
 print(fonts)
