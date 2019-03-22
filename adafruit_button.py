@@ -40,7 +40,7 @@ Implementation Notes
 
 from micropython import const
 import displayio
-from adafruit_display_text.text_area import TextArea
+from adafruit_display_text.label import Label
 from adafruit_display_shapes.rect import Rect
 from adafruit_display_shapes.roundrect import RoundRect
 
@@ -69,9 +69,9 @@ class Button():
                   Defaults to RECT.
     :param fill_color: The color to fill the button. Defaults to 0xFFFFFF.
     :param outline_color: The color of the outline of the button.
-    :param label: The button label. Defaults to 0x0.
+    :param label: The text that appears inside the button. Defaults to not displaying the label.
     :param label_font: The button label font.
-    :param label_color: The color of the button label. Defaults to 0x0.
+    :param label_color: The color of the button label text. Defaults to 0x0.
     :param selected_fill: Inverts the fill color.
     :param selected_outline: Inverts the outline color.
     :param selected_label: Inverts the label color.
@@ -138,7 +138,7 @@ class Button():
             dims = label_font.text_bounding_box(label)
             if dims[2] >= width or dims[3] >= height:
                 raise RuntimeError("Button not large enough for label")
-            self.label = TextArea(label_font, text=label)
+            self.label = Label(label_font, text=label)
             self.label.x = x + (width - dims[2]) // 2
             self.label.y = y + (height - dims[3])
             self.label.color = label_color
