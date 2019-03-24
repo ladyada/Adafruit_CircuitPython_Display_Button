@@ -96,6 +96,7 @@ class Button():
         self.group = displayio.Group()
         self.name = name
         self.label = label
+        self.body = self.fill = self.shadow = None
 
         self.fill_color = _check_color(fill_color)
         self.outline_color = _check_color(outline_color)
@@ -111,7 +112,6 @@ class Button():
             self.selected_outline = (~self.outline_color) & 0xFFFFFF
 
         if outline_color or fill_color:
-            self.body = self.shadow = None
             if style == Button.RECT:
                 self.body = Rect(x, y, width, height,
                                  fill=self.fill_color, outline=self.outline_color)
@@ -135,10 +135,10 @@ class Button():
         if label and (label_color is not None):  # button with text label
             if not label_font:
                 raise RuntimeError("Please provide label font")
-            dims = label_font.text_bounding_box(label)
+            self.label = Label(label_font, text=label)
+            dims = self.label.bounding_box
             if dims[2] >= width or dims[3] >= height:
                 raise RuntimeError("Button not large enough for label")
-            self.label = Label(label_font, text=label)
             self.label.x = x + (width - dims[2]) // 2
             self.label.y = y + height // 2
             self.label.color = label_color
@@ -146,7 +146,6 @@ class Button():
 
             if self.selected_label is None and label_color is not None:
                 self.selected_label = (~label_color) & 0xFFFFFF
-            # print(dims)
 
         # else: # ok just a bounding box
         # self.bodyshape = displayio.Shape(width, height)
@@ -159,16 +158,23 @@ class Button():
 
     @selected.setter
     def selected(self, value):
-        if value != self._selected:
-            self._selected = value
+        if value == self._selected:
+            return   # bail now, nothing more to do
+        self._selected = value
         if self._selected:
-            self.body.fill = self.selected_fill
-            self.body.outline = self.selected_outline
-            self.label.color = self.selected_label
+            new_fill = self.selected_fill
+            new_out = self.selected_outline
+            new_label = self.selected_label
         else:
-            self.body.fill = self.fill_color
-            self.body.outline = self.outline_color
-            self.label.color = self.label_color
+            new_fill = self.fill_color
+            new_out = self.outline_color
+            new_label = self.label_color
+
+        if self.body is not None:
+            self.body.fill = new_fill
+            self.body.outline = new_out
+        if self.label is not None:
+            self.label.color = new_label
 
     def contains(self, point):
         """Used to determine if a point is contained within a button. For example,
