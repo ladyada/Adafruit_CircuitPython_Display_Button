@@ -140,7 +140,7 @@ class Button():
                 raise RuntimeError("Button not large enough for label")
             self.label = Label(label_font, text=label)
             self.label.x = x + (width - dims[2]) // 2
-            self.label.y = y + (height - dims[3])
+            self.label.y = y + height // 2
             self.label.color = label_color
             self.group.append(self.label)
 
