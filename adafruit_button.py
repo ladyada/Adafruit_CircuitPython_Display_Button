@@ -95,12 +95,13 @@ class Button():
         self._selected = False
         self.group = displayio.Group()
         self.name = name
-        self.label = label
+        self._label = label
         self.body = self.fill = self.shadow = None
 
         self.fill_color = _check_color(fill_color)
         self.outline_color = _check_color(outline_color)
-        self.label_color = label_color
+        self._label_color = label_color
+        self._label_font = label_font
         # Selecting inverts the button colors!
         self.selected_fill = _check_color(selected_fill)
         self.selected_outline = _check_color(selected_outline)
@@ -132,24 +133,40 @@ class Button():
                 self.group.append(self.shadow)
             self.group.append(self.body)
 
-        if label and (label_color is not None):  # button with text label
-            if not label_font:
-                raise RuntimeError("Please provide label font")
-            self.label = Label(label_font, text=label)
-            dims = self.label.bounding_box
-            if dims[2] >= width or dims[3] >= height:
-                raise RuntimeError("Button not large enough for label")
-            self.label.x = x + (width - dims[2]) // 2
-            self.label.y = y + height // 2
-            self.label.color = label_color
-            self.group.append(self.label)
-
-            if self.selected_label is None and label_color is not None:
-                self.selected_label = (~label_color) & 0xFFFFFF
+        self.label = label
 
         # else: # ok just a bounding box
         # self.bodyshape = displayio.Shape(width, height)
         # self.group.append(self.bodyshape)
+
+    @property
+    def label(self):
+        """The text label of the button"""
+        return self._label.text
+
+    @label.setter
+    def label(self, newtext):
+        if self._label and (self.group[-1] == self._label):
+            self.group.pop()
+
+        self._label = None
+        if not newtext or (self._label_color is None):  # no new text
+            return     # nothing to do!
+
+        if not self._label_font:
+            raise RuntimeError("Please provide label font")
+        self._label = Label(self._label_font, text=newtext)
+        dims = self._label.bounding_box
+        if dims[2] >= self.width or dims[3] >= self.height:
+            raise RuntimeError("Button not large enough for label")
+        self._label.x = self.x + (self.width - dims[2]) // 2
+        self._label.y = self.y + self.height // 2
+        self._label.color = self._label_color
+        self.group.append(self._label)
+
+        if (self.selected_label is None) and (self._label_color is not None):
+            self.selected_label = (~self._label_color) & 0xFFFFFF
+
 
     @property
     def selected(self):
@@ -168,13 +185,13 @@ class Button():
         else:
             new_fill = self.fill_color
             new_out = self.outline_color
-            new_label = self.label_color
+            new_label = self._label_color
         # update all relevant colros!
         if self.body is not None:
             self.body.fill = new_fill
             self.body.outline = new_out
-        if self.label is not None:
-            self.label.color = new_label
+        if self._label is not None:
+            self._label.color = new_label
 
     def contains(self, point):
         """Used to determine if a point is contained within a button. For example,
