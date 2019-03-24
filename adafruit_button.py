@@ -169,7 +169,7 @@ class Button():
             new_fill = self.fill_color
             new_out = self.outline_color
             new_label = self.label_color
-
+        # update all relevant colros!
         if self.body is not None:
             self.body.fill = new_fill
             self.body.outline = new_out
