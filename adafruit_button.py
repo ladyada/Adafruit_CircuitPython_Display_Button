@@ -146,7 +146,7 @@ class Button():
 
     @label.setter
     def label(self, newtext):
-        if self._label and len(self.group) > 0 and (self.group[-1] == self._label):
+        if self._label and self.group and (self.group[-1] == self._label):
             self.group.pop()
 
         self._label = None
