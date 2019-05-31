@@ -37,8 +37,8 @@ color_palette = displayio.Palette(1)
 color_palette[0] = 0x404040
 bg_sprite = displayio.TileGrid(color_bitmap,
                                pixel_shader=color_palette,
-                               position=(0, 0))
-print(bg_sprite.position)
+                               x=0, y=0)
+print(bg_sprite.x, bg_sprite.y)
 splash.append(bg_sprite)
 
 ##########################################################################
