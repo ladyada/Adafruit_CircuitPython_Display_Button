@@ -19,7 +19,7 @@ fonts = [file for file in os.listdir(cwd+"/fonts/")
 for i, filename in enumerate(fonts):
     fonts[i] = cwd+"/fonts/"+filename
 print(fonts)
-THE_FONT = "/fonts/Chicago-12.bdf"
+THE_FONT = "/fonts/Arial-12.bdf"
 DISPLAY_STRING = "Button Text"
 
 # Make the display context
@@ -74,28 +74,25 @@ button_3 = Button(x=BUTTON_MARGIN, y=BUTTON_MARGIN*2+BUTTON_HEIGHT,
 buttons.append(button_3)
 
 # a roundrect
-button_4 = Button(x=BUTTON_MARGIN, y=BUTTON_MARGIN*2+BUTTON_HEIGHT,
+button_4 = Button(x=BUTTON_MARGIN*2+BUTTON_WIDTH, y=BUTTON_MARGIN*2+BUTTON_HEIGHT,
                   width=BUTTON_WIDTH, height=BUTTON_HEIGHT,
                   label="button4", label_font=font, style=Button.ROUNDRECT)
 buttons.append(button_4)
 
 # a shadowrect
-button_5 = Button(x=BUTTON_MARGIN*2+BUTTON_WIDTH, y=BUTTON_MARGIN*2+BUTTON_HEIGHT,
+button_5 = Button(x=BUTTON_MARGIN*3+BUTTON_WIDTH*2, y=BUTTON_MARGIN*2+BUTTON_HEIGHT,
                   width=BUTTON_WIDTH, height=BUTTON_HEIGHT,
                   label="button5", label_font=font, style=Button.SHADOWRECT)
 buttons.append(button_5)
 
 # a shadowroundrect
-button_6 = Button(x=BUTTON_MARGIN*3+2*BUTTON_WIDTH, y=BUTTON_MARGIN*2+BUTTON_HEIGHT,
+button_6 = Button(x=BUTTON_MARGIN, y=BUTTON_MARGIN*3+BUTTON_HEIGHT*2,
                   width=BUTTON_WIDTH, height=BUTTON_HEIGHT,
-                  label="button5", label_font=font, style=Button.SHADOWROUNDRECT)
+                  label="button6", label_font=font, style=Button.SHADOWROUNDRECT)
 buttons.append(button_6)
-
-
 
 for b in buttons:
     splash.append(b.group)
-
 
 while True:
     p = ts.touch_point
