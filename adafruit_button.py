@@ -112,7 +112,7 @@ class Button():
         if self.selected_outline is None and outline_color is not None:
             self.selected_outline = (~self.outline_color) & 0xFFFFFF
 
-        if outline_color or fill_color:
+        if (outline_color is not None) or (fill_color is not None):
             if style == Button.RECT:
                 self.body = Rect(x, y, width, height,
                                  fill=self.fill_color, outline=self.outline_color)
