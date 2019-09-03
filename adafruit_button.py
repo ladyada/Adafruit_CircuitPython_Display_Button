@@ -56,7 +56,7 @@ def _check_color(color):
     return color
 
 
-class Button():
+class Button(displayio.Group):
     # pylint: disable=too-many-instance-attributes, too-many-locals
     """Helper class for creating UI buttons for ``displayio``.
 
@@ -87,6 +87,7 @@ class Button():
                  label=None, label_font=None, label_color=0x0,
                  selected_fill=None, selected_outline=None,
                  selected_label=None):
+        super().__init__()
         self.x = x
         self.y = y
         self.width = width
@@ -134,10 +135,6 @@ class Button():
             self.group.append(self.body)
 
         self.label = label
-
-        # else: # ok just a bounding box
-        # self.bodyshape = displayio.Shape(width, height)
-        # self.group.append(self.bodyshape)
 
     @property
     def label(self):
