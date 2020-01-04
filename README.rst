@@ -9,8 +9,8 @@ Introduction
     :target: https://discord.gg/nBQh6qu
     :alt: Discord
 
-.. image:: https://travis-ci.com/adafruit/Adafruit_CircuitPython_Display_Button.svg?branch=master
-    :target: https://travis-ci.com/adafruit/Adafruit_CircuitPython_Display_Button
+.. image:: https://github.com/adafruit/Adafruit_CircuitPython_Display_Button/workflows/Build%20CI/badge.svg
+    :target: https://github.com/adafruit/Adafruit_CircuitPython_Display_Button/actions
     :alt: Build Status
 
 UI Buttons for displayio
