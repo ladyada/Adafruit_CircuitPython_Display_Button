@@ -52,7 +52,7 @@ def _check_color(color):
     # if a tuple is supplied, convert it to a RGB number
     if isinstance(color, tuple):
         r, g, b = color
-        return int((r << 16) + (g << 8) + (b & 0xff))
+        return int((r << 16) + (g << 8) + (b & 0xFF))
     return color
 
 
@@ -82,11 +82,24 @@ class Button(displayio.Group):
     SHADOWRECT = const(2)
     SHADOWROUNDRECT = const(3)
 
-    def __init__(self, *, x, y, width, height, name=None, style=RECT,
-                 fill_color=0xFFFFFF, outline_color=0x0,
-                 label=None, label_font=None, label_color=0x0,
-                 selected_fill=None, selected_outline=None,
-                 selected_label=None):
+    def __init__(
+        self,
+        *,
+        x,
+        y,
+        width,
+        height,
+        name=None,
+        style=RECT,
+        fill_color=0xFFFFFF,
+        outline_color=0x0,
+        label=None,
+        label_font=None,
+        label_color=0x0,
+        selected_fill=None,
+        selected_outline=None,
+        selected_label=None
+    ):
         super().__init__()
         self.x = x
         self.y = y
@@ -115,21 +128,49 @@ class Button(displayio.Group):
 
         if (outline_color is not None) or (fill_color is not None):
             if style == Button.RECT:
-                self.body = Rect(x, y, width, height,
-                                 fill=self.fill_color, outline=self.outline_color)
+                self.body = Rect(
+                    x,
+                    y,
+                    width,
+                    height,
+                    fill=self.fill_color,
+                    outline=self.outline_color,
+                )
             elif style == Button.ROUNDRECT:
-                self.body = RoundRect(x, y, width, height, r=10,
-                                      fill=self.fill_color, outline=self.outline_color)
+                self.body = RoundRect(
+                    x,
+                    y,
+                    width,
+                    height,
+                    r=10,
+                    fill=self.fill_color,
+                    outline=self.outline_color,
+                )
             elif style == Button.SHADOWRECT:
-                self.shadow = Rect(x + 2, y + 2, width - 2, height - 2,
-                                   fill=outline_color)
-                self.body = Rect(x, y, width - 2, height - 2,
-                                 fill=self.fill_color, outline=self.outline_color)
+                self.shadow = Rect(
+                    x + 2, y + 2, width - 2, height - 2, fill=outline_color
+                )
+                self.body = Rect(
+                    x,
+                    y,
+                    width - 2,
+                    height - 2,
+                    fill=self.fill_color,
+                    outline=self.outline_color,
+                )
             elif style == Button.SHADOWROUNDRECT:
-                self.shadow = RoundRect(x + 2, y + 2, width - 2, height - 2, r=10,
-                                        fill=self.outline_color)
-                self.body = RoundRect(x, y, width - 2, height - 2, r=10,
-                                      fill=self.fill_color, outline=self.outline_color)
+                self.shadow = RoundRect(
+                    x + 2, y + 2, width - 2, height - 2, r=10, fill=self.outline_color
+                )
+                self.body = RoundRect(
+                    x,
+                    y,
+                    width - 2,
+                    height - 2,
+                    r=10,
+                    fill=self.fill_color,
+                    outline=self.outline_color,
+                )
             if self.shadow:
                 self.group.append(self.shadow)
             self.group.append(self.body)
@@ -148,7 +189,7 @@ class Button(displayio.Group):
 
         self._label = None
         if not newtext or (self._label_color is None):  # no new text
-            return     # nothing to do!
+            return  # nothing to do!
 
         if not self._label_font:
             raise RuntimeError("Please provide label font")
@@ -164,7 +205,6 @@ class Button(displayio.Group):
         if (self.selected_label is None) and (self._label_color is not None):
             self.selected_label = (~self._label_color) & 0xFFFFFF
 
-
     @property
     def selected(self):
         """Selected inverts the colors."""
@@ -173,7 +213,7 @@ class Button(displayio.Group):
     @selected.setter
     def selected(self, value):
         if value == self._selected:
-            return   # bail now, nothing more to do
+            return  # bail now, nothing more to do
         self._selected = value
         if self._selected:
             new_fill = self.selected_fill
@@ -195,5 +235,6 @@ class Button(displayio.Group):
         ``button.contains(touch)`` where ``touch`` is the touch point on the screen will allow for
         determining that a button has been touched.
         """
-        return (self.x <= point[0] <= self.x + self.width) and (self.y <= point[1] <=
-                                                                self.y + self.height)
+        return (self.x <= point[0] <= self.x + self.width) and (
+            self.y <= point[1] <= self.y + self.height
+        )
