@@ -229,6 +229,16 @@ class Button(displayio.Group):
         if self._label is not None:
             self._label.color = new_label
 
+    @property
+    def group(self):
+        """Return self for compatibility with old API."""
+        print(
+            "Warning: The group property is being deprecated. "
+            "User code should be updated to add the Button directly to the "
+            "Display or other Groups."
+        )
+        return self
+
     def contains(self, point):
         """Used to determine if a point is contained within a button. For example,
         ``button.contains(touch)`` where ``touch`` is the touch point on the screen will allow for
