@@ -146,9 +146,7 @@ class Button(displayio.Group):
                     outline=self.outline_color,
                 )
             elif style == Button.SHADOWRECT:
-                self.shadow = Rect(
-                    2, 2, width - 2, height - 2, fill=outline_color
-                )
+                self.shadow = Rect(2, 2, width - 2, height - 2, fill=outline_color)
                 self.body = Rect(
                     0,
                     0,
