@@ -100,14 +100,13 @@ class Button(displayio.Group):
         selected_outline=None,
         selected_label=None
     ):
-        super().__init__()
+        super().__init__(x=x, y=y)
         self.x = x
         self.y = y
         self.width = width
         self.height = height
         self._font = label_font
         self._selected = False
-        self.group = displayio.Group()
         self.name = name
         self._label = label
         self.body = self.fill = self.shadow = None
@@ -129,8 +128,8 @@ class Button(displayio.Group):
         if (outline_color is not None) or (fill_color is not None):
             if style == Button.RECT:
                 self.body = Rect(
-                    x,
-                    y,
+                    0,
+                    0,
                     width,
                     height,
                     fill=self.fill_color,
@@ -138,8 +137,8 @@ class Button(displayio.Group):
                 )
             elif style == Button.ROUNDRECT:
                 self.body = RoundRect(
-                    x,
-                    y,
+                    0,
+                    0,
                     width,
                     height,
                     r=10,
@@ -147,12 +146,10 @@ class Button(displayio.Group):
                     outline=self.outline_color,
                 )
             elif style == Button.SHADOWRECT:
-                self.shadow = Rect(
-                    x + 2, y + 2, width - 2, height - 2, fill=outline_color
-                )
+                self.shadow = Rect(2, 2, width - 2, height - 2, fill=outline_color)
                 self.body = Rect(
-                    x,
-                    y,
+                    0,
+                    0,
                     width - 2,
                     height - 2,
                     fill=self.fill_color,
@@ -160,11 +157,11 @@ class Button(displayio.Group):
                 )
             elif style == Button.SHADOWROUNDRECT:
                 self.shadow = RoundRect(
-                    x + 2, y + 2, width - 2, height - 2, r=10, fill=self.outline_color
+                    2, 2, width - 2, height - 2, r=10, fill=self.outline_color
                 )
                 self.body = RoundRect(
-                    x,
-                    y,
+                    0,
+                    0,
                     width - 2,
                     height - 2,
                     r=10,
@@ -172,8 +169,8 @@ class Button(displayio.Group):
                     outline=self.outline_color,
                 )
             if self.shadow:
-                self.group.append(self.shadow)
-            self.group.append(self.body)
+                self.append(self.shadow)
+            self.append(self.body)
 
         self.label = label
 
@@ -184,8 +181,8 @@ class Button(displayio.Group):
 
     @label.setter
     def label(self, newtext):
-        if self._label and self.group and (self.group[-1] == self._label):
-            self.group.pop()
+        if self._label and self and (self[-1] == self._label):
+            self.pop()
 
         self._label = None
         if not newtext or (self._label_color is None):  # no new text
@@ -197,10 +194,10 @@ class Button(displayio.Group):
         dims = self._label.bounding_box
         if dims[2] >= self.width or dims[3] >= self.height:
             raise RuntimeError("Button not large enough for label")
-        self._label.x = self.x + (self.width - dims[2]) // 2
-        self._label.y = self.y + self.height // 2
+        self._label.x = (self.width - dims[2]) // 2
+        self._label.y = self.height // 2
         self._label.color = self._label_color
-        self.group.append(self._label)
+        self.append(self._label)
 
         if (self.selected_label is None) and (self._label_color is not None):
             self.selected_label = (~self._label_color) & 0xFFFFFF
@@ -229,6 +226,16 @@ class Button(displayio.Group):
             self.body.outline = new_out
         if self._label is not None:
             self._label.color = new_label
+
+    @property
+    def group(self):
+        """Return self for compatibility with old API."""
+        print(
+            "Warning: The group property is being deprecated. "
+            "User code should be updated to add the Button directly to the "
+            "Display or other Groups."
+        )
+        return self
 
     def contains(self, point):
         """Used to determine if a point is contained within a button. For example,

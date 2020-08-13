@@ -45,7 +45,7 @@ button = Button(
 )
 
 # Add button to the display context
-splash.append(button.group)
+splash.append(button)
 
 # Loop and look for touches
 while True:

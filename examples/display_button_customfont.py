@@ -139,7 +139,7 @@ button_6 = Button(
 buttons.append(button_6)
 
 for b in buttons:
-    splash.append(b.group)
+    splash.append(b)
 
 while True:
     p = ts.touch_point

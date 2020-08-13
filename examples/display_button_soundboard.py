@@ -40,7 +40,7 @@ for spot in spots:
         label_color=None,
         name=spot["file"],
     )
-    pyportal.splash.append(button.group)
+    pyportal.splash.append(button)
     buttons.append(button)
 
 last_pressed = None
