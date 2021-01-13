@@ -1,9 +1,12 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 import os
 import board
 import displayio
 from adafruit_bitmap_font import bitmap_font
-from adafruit_button import Button
 import adafruit_touchscreen
+from adafruit_button import Button
 
 # These pins are used as both analog and digital! XL, XR and YU must be analog
 # and digital capable. YD just need to be digital
