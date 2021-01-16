@@ -1,8 +1,11 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 import board
 import displayio
 import terminalio
-from adafruit_button import Button
 import adafruit_touchscreen
+from adafruit_button import Button
 
 # --| Button Config |-------------------------------------------------
 BUTTON_X = 110
