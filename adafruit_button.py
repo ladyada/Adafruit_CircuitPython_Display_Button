@@ -237,7 +237,8 @@ class Button(displayio.Group):
     @fill_color.setter
     def fill_color(self, new_color):
         self._fill_color = _check_color(new_color)
-        self.body.fill = self._fill_color
+        if not self.selected:
+            self.body.fill = self._fill_color
 
     @property
     def outline_color(self):
@@ -247,7 +248,8 @@ class Button(displayio.Group):
     @outline_color.setter
     def outline_color(self, new_color):
         self._outline_color = _check_color(new_color)
-        self.body.outline = self._outline_color
+        if not self.selected:
+            self.body.outline = self._outline_color
 
     @property
     def selected_fill(self):
@@ -257,6 +259,8 @@ class Button(displayio.Group):
     @selected_fill.setter
     def selected_fill(self, new_color):
         self._selected_fill = _check_color(new_color)
+        if self.selected:
+            self.body.fill = self._selected_fill
 
     @property
     def selected_outline(self):
@@ -266,6 +270,8 @@ class Button(displayio.Group):
     @selected_outline.setter
     def selected_outline(self, new_color):
         self._selected_outline = _check_color(new_color)
+        if self.selected:
+            self.body.outline = self._selected_outline
 
     @property
     def selected_label(self):
