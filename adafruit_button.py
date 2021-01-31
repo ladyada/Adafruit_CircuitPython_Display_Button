@@ -94,19 +94,19 @@ class Button(displayio.Group):
         self._label = label
         self.body = self.fill = self.shadow = None
 
-        self.fill_color = _check_color(fill_color)
-        self.outline_color = _check_color(outline_color)
+        self._fill_color = _check_color(fill_color)
+        self._outline_color = _check_color(outline_color)
         self._label_color = label_color
         self._label_font = label_font
         # Selecting inverts the button colors!
-        self.selected_fill = _check_color(selected_fill)
-        self.selected_outline = _check_color(selected_outline)
-        self.selected_label = _check_color(selected_label)
+        self._selected_fill = _check_color(selected_fill)
+        self._selected_outline = _check_color(selected_outline)
+        self._selected_label = _check_color(selected_label)
 
         if self.selected_fill is None and fill_color is not None:
-            self.selected_fill = (~self.fill_color) & 0xFFFFFF
+            self.selected_fill = (~self._fill_color) & 0xFFFFFF
         if self.selected_outline is None and outline_color is not None:
-            self.selected_outline = (~self.outline_color) & 0xFFFFFF
+            self.selected_outline = (~self._outline_color) & 0xFFFFFF
 
         if (outline_color is not None) or (fill_color is not None):
             if style == Button.RECT:
@@ -115,8 +115,8 @@ class Button(displayio.Group):
                     0,
                     width,
                     height,
-                    fill=self.fill_color,
-                    outline=self.outline_color,
+                    fill=self._fill_color,
+                    outline=self._outline_color,
                 )
             elif style == Button.ROUNDRECT:
                 self.body = RoundRect(
@@ -125,8 +125,8 @@ class Button(displayio.Group):
                     width,
                     height,
                     r=10,
-                    fill=self.fill_color,
-                    outline=self.outline_color,
+                    fill=self._fill_color,
+                    outline=self._outline_color,
                 )
             elif style == Button.SHADOWRECT:
                 self.shadow = Rect(2, 2, width - 2, height - 2, fill=outline_color)
@@ -135,12 +135,12 @@ class Button(displayio.Group):
                     0,
                     width - 2,
                     height - 2,
-                    fill=self.fill_color,
-                    outline=self.outline_color,
+                    fill=self._fill_color,
+                    outline=self._outline_color,
                 )
             elif style == Button.SHADOWROUNDRECT:
                 self.shadow = RoundRect(
-                    2, 2, width - 2, height - 2, r=10, fill=self.outline_color
+                    2, 2, width - 2, height - 2, r=10, fill=self._outline_color
                 )
                 self.body = RoundRect(
                     0,
@@ -148,8 +148,8 @@ class Button(displayio.Group):
                     width - 2,
                     height - 2,
                     r=10,
-                    fill=self.fill_color,
-                    outline=self.outline_color,
+                    fill=self._fill_color,
+                    outline=self._outline_color,
                 )
             if self.shadow:
                 self.append(self.shadow)
@@ -200,10 +200,10 @@ class Button(displayio.Group):
             new_out = self.selected_outline
             new_label = self.selected_label
         else:
-            new_fill = self.fill_color
-            new_out = self.outline_color
+            new_fill = self._fill_color
+            new_out = self._outline_color
             new_label = self._label_color
-        # update all relevant colros!
+        # update all relevant colors!
         if self.body is not None:
             self.body.fill = new_fill
             self.body.outline = new_out
@@ -228,3 +228,66 @@ class Button(displayio.Group):
         return (self.x <= point[0] <= self.x + self.width) and (
             self.y <= point[1] <= self.y + self.height
         )
+
+    @property
+    def fill_color(self):
+        """The fill color of the button body"""
+        return self._fill_color
+
+    @fill_color.setter
+    def fill_color(self, new_color):
+        self._fill_color = _check_color(new_color)
+        if not self.selected:
+            self.body.fill = self._fill_color
+
+    @property
+    def outline_color(self):
+        """The outline color of the button body"""
+        return self._outline_color
+
+    @outline_color.setter
+    def outline_color(self, new_color):
+        self._outline_color = _check_color(new_color)
+        if not self.selected:
+            self.body.outline = self._outline_color
+
+    @property
+    def selected_fill(self):
+        """The fill color of the button body when selected"""
+        return self._selected_fill
+
+    @selected_fill.setter
+    def selected_fill(self, new_color):
+        self._selected_fill = _check_color(new_color)
+        if self.selected:
+            self.body.fill = self._selected_fill
+
+    @property
+    def selected_outline(self):
+        """The outline color of the button body when selected"""
+        return self._selected_outline
+
+    @selected_outline.setter
+    def selected_outline(self, new_color):
+        self._selected_outline = _check_color(new_color)
+        if self.selected:
+            self.body.outline = self._selected_outline
+
+    @property
+    def selected_label(self):
+        """The font color of the button when selected"""
+        return self._selected_label
+
+    @selected_label.setter
+    def selected_label(self, new_color):
+        self._selected_label = _check_color(new_color)
+
+    @property
+    def label_color(self):
+        """The font color of the button"""
+        return self._label_color
+
+    @label_color.setter
+    def label_color(self, new_color):
+        self._label_color = _check_color(new_color)
+        self._label.color = self._label_color
