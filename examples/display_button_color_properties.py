@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2021 foamyguy for Adafruit Industries
+# SPDX-FileCopyrightText: 2021 Tim Cocks for Adafruit Industries
 # SPDX-License-Identifier: MIT
 
 """
