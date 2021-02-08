@@ -336,3 +336,16 @@ class Button(displayio.Group):
         if self.body:
             self.append(self.body)
         self.label = self.label
+
+    def resize(self, new_width, new_height):
+        """Resize the button to the new width and height given
+        :param new_width int the desired width
+        :param new_height int the desired height
+        """
+        self._width = new_width
+        self._height = new_height
+        self._empty_self_group()
+        self._create_body()
+        if self.body:
+            self.append(self.body)
+        self.label = self.label
