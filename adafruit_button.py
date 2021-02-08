@@ -117,7 +117,6 @@ class Button(displayio.Group):
                 )
             if self.shadow:
                 self.append(self.shadow)
-            self.append(self.body)
 
     RECT = const(0)
     ROUNDRECT = const(1)
