@@ -192,7 +192,13 @@ class Button(displayio.Group):
         self._label = Label(self._label_font, text=newtext)
         dims = self._label.bounding_box
         if dims[2] >= self.width or dims[3] >= self.height:
-            raise RuntimeError("Button not large enough for label")
+            while len(self._label.text) > 1 and (
+                dims[2] >= self.width or dims[3] >= self.height
+            ):
+                self._label.text = "{}.".format(self._label.text[:-2])
+                dims = self._label.bounding_box
+            if len(self._label.text) <= 1:
+                raise RuntimeError("Button not large enough for label")
         self._label.x = (self.width - dims[2]) // 2
         self._label.y = self.height // 2
         self._label.color = self._label_color
