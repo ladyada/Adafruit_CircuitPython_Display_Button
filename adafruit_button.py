@@ -58,8 +58,66 @@ class Button(displayio.Group):
     :param selected_fill: Inverts the fill color.
     :param selected_outline: Inverts the outline color.
     :param selected_label: Inverts the label color.
-
     """
+
+    def _empty_self_group(self):
+        while len(self) > 0:
+            self.pop()
+
+    def _create_body(self):
+        if (self.outline_color is not None) or (self.fill_color is not None):
+            if self.style == Button.RECT:
+                self.body = Rect(
+                    0,
+                    0,
+                    self.width,
+                    self.height,
+                    fill=self._fill_color,
+                    outline=self._outline_color,
+                )
+            elif self.style == Button.ROUNDRECT:
+                self.body = RoundRect(
+                    0,
+                    0,
+                    self.width,
+                    self.height,
+                    r=10,
+                    fill=self._fill_color,
+                    outline=self._outline_color,
+                )
+            elif self.style == Button.SHADOWRECT:
+                self.shadow = Rect(
+                    2, 2, self.width - 2, self.height - 2, fill=self.outline_color
+                )
+                self.body = Rect(
+                    0,
+                    0,
+                    self.width - 2,
+                    self.height - 2,
+                    fill=self._fill_color,
+                    outline=self._outline_color,
+                )
+            elif self.style == Button.SHADOWROUNDRECT:
+                self.shadow = RoundRect(
+                    2,
+                    2,
+                    self.width - 2,
+                    self.height - 2,
+                    r=10,
+                    fill=self._outline_color,
+                )
+                self.body = RoundRect(
+                    0,
+                    0,
+                    self.width - 2,
+                    self.height - 2,
+                    r=10,
+                    fill=self._fill_color,
+                    outline=self._outline_color,
+                )
+            if self.shadow:
+                self.append(self.shadow)
+
     RECT = const(0)
     ROUNDRECT = const(1)
     SHADOWRECT = const(2)
@@ -86,13 +144,14 @@ class Button(displayio.Group):
         super().__init__(x=x, y=y)
         self.x = x
         self.y = y
-        self.width = width
-        self.height = height
+        self._width = width
+        self._height = height
         self._font = label_font
         self._selected = False
         self.name = name
         self._label = label
         self.body = self.fill = self.shadow = None
+        self.style = style
 
         self._fill_color = _check_color(fill_color)
         self._outline_color = _check_color(outline_color)
@@ -108,51 +167,8 @@ class Button(displayio.Group):
         if self.selected_outline is None and outline_color is not None:
             self.selected_outline = (~self._outline_color) & 0xFFFFFF
 
-        if (outline_color is not None) or (fill_color is not None):
-            if style == Button.RECT:
-                self.body = Rect(
-                    0,
-                    0,
-                    width,
-                    height,
-                    fill=self._fill_color,
-                    outline=self._outline_color,
-                )
-            elif style == Button.ROUNDRECT:
-                self.body = RoundRect(
-                    0,
-                    0,
-                    width,
-                    height,
-                    r=10,
-                    fill=self._fill_color,
-                    outline=self._outline_color,
-                )
-            elif style == Button.SHADOWRECT:
-                self.shadow = Rect(2, 2, width - 2, height - 2, fill=outline_color)
-                self.body = Rect(
-                    0,
-                    0,
-                    width - 2,
-                    height - 2,
-                    fill=self._fill_color,
-                    outline=self._outline_color,
-                )
-            elif style == Button.SHADOWROUNDRECT:
-                self.shadow = RoundRect(
-                    2, 2, width - 2, height - 2, r=10, fill=self._outline_color
-                )
-                self.body = RoundRect(
-                    0,
-                    0,
-                    width - 2,
-                    height - 2,
-                    r=10,
-                    fill=self._fill_color,
-                    outline=self._outline_color,
-                )
-            if self.shadow:
-                self.append(self.shadow)
+        self._create_body()
+        if self.body:
             self.append(self.body)
 
         self.label = label
@@ -176,7 +192,13 @@ class Button(displayio.Group):
         self._label = Label(self._label_font, text=newtext)
         dims = self._label.bounding_box
         if dims[2] >= self.width or dims[3] >= self.height:
-            raise RuntimeError("Button not large enough for label")
+            while len(self._label.text) > 1 and (
+                dims[2] >= self.width or dims[3] >= self.height
+            ):
+                self._label.text = "{}.".format(self._label.text[:-2])
+                dims = self._label.bounding_box
+            if len(self._label.text) <= 1:
+                raise RuntimeError("Button not large enough for label")
         self._label.x = (self.width - dims[2]) // 2
         self._label.y = self.height // 2
         self._label.color = self._label_color
@@ -291,3 +313,44 @@ class Button(displayio.Group):
     def label_color(self, new_color):
         self._label_color = _check_color(new_color)
         self._label.color = self._label_color
+
+    @property
+    def width(self):
+        """The width of the button"""
+        return self._width
+
+    @width.setter
+    def width(self, new_width):
+        self._width = new_width
+        self._empty_self_group()
+        self._create_body()
+        if self.body:
+            self.append(self.body)
+        self.label = self.label
+
+    @property
+    def height(self):
+        """The height of the button"""
+        return self._height
+
+    @height.setter
+    def height(self, new_height):
+        self._height = new_height
+        self._empty_self_group()
+        self._create_body()
+        if self.body:
+            self.append(self.body)
+        self.label = self.label
+
+    def resize(self, new_width, new_height):
+        """Resize the button to the new width and height given
+        :param new_width int the desired width
+        :param new_height int the desired height
+        """
+        self._width = new_width
+        self._height = new_height
+        self._empty_self_group()
+        self._create_body()
+        if self.body:
+            self.append(self.body)
+        self.label = self.label
