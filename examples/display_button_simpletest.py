@@ -1,5 +1,8 @@
 # SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
 # SPDX-License-Identifier: MIT
+"""
+Simple button example.
+"""
 
 import board
 import displayio
@@ -57,6 +60,6 @@ while True:
         if button.contains(p):
             button.selected = True
         else:
-            button.selected = False # if touch is dragged outside of button
+            button.selected = False  # if touch is dragged outside of button
     else:
-        button.selected = False # if touch is released
+        button.selected = False  # if touch is released
