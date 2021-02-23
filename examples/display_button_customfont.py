@@ -1,5 +1,8 @@
 # SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
 # SPDX-License-Identifier: MIT
+"""
+Button example with a custom font.
+"""
 
 import os
 import board
