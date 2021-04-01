@@ -10,6 +10,8 @@ import terminalio
 import adafruit_touchscreen
 from adafruit_button import Button
 
+display = board.DISPLAY
+
 # --| Button Config |-------------------------------------------------
 BUTTON_X = 110
 BUTTON_Y = 95
@@ -29,12 +31,12 @@ ts = adafruit_touchscreen.Touchscreen(
     board.TOUCH_YD,
     board.TOUCH_YU,
     calibration=((5200, 59000), (5800, 57000)),
-    size=(320, 240),
+    size=(display.width, display.height),
 )
 
 # Make the display context
 splash = displayio.Group()
-board.DISPLAY.show(splash)
+display.show(splash)
 
 # Make the button
 button = Button(

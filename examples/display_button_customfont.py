@@ -11,6 +11,8 @@ from adafruit_bitmap_font import bitmap_font
 import adafruit_touchscreen
 from adafruit_button import Button
 
+display = board.DISPLAY
+
 # These pins are used as both analog and digital! XL, XR and YU must be analog
 # and digital capable. YD just need to be digital
 ts = adafruit_touchscreen.Touchscreen(
@@ -19,7 +21,7 @@ ts = adafruit_touchscreen.Touchscreen(
     board.TOUCH_YD,
     board.TOUCH_YU,
     calibration=((5200, 59000), (5800, 57000)),
-    size=(320, 240),
+    size=(display.width, display.height),
 )
 
 # the current working directory (where this file is)
@@ -37,7 +39,7 @@ DISPLAY_STRING = "Button Text"
 
 # Make the display context
 splash = displayio.Group(max_size=20)
-board.DISPLAY.show(splash)
+display.show(splash)
 BUTTON_WIDTH = 80
 BUTTON_HEIGHT = 40
 BUTTON_MARGIN = 20
@@ -45,7 +47,7 @@ BUTTON_MARGIN = 20
 ##########################################################################
 # Make a background color fill
 
-color_bitmap = displayio.Bitmap(320, 240, 1)
+color_bitmap = displayio.Bitmap(display.width, display.height, 1)
 color_palette = displayio.Palette(1)
 color_palette[0] = 0x404040
 bg_sprite = displayio.TileGrid(color_bitmap, pixel_shader=color_palette, x=0, y=0)
