@@ -11,6 +11,9 @@ from adafruit_bitmap_font import bitmap_font
 import adafruit_touchscreen
 from adafruit_button import Button
 
+# use built in display (MagTag, PyPortal, PyGamer, PyBadge, CLUE, etc.)
+# see guide for setting up external displays (TFT / OLED breakouts, RGB matrices, etc.)
+# https://learn.adafruit.com/circuitpython-display-support-using-displayio/display-and-display-bus
 display = board.DISPLAY
 
 # These pins are used as both analog and digital! XL, XR and YU must be analog
