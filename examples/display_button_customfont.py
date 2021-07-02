@@ -41,7 +41,7 @@ THE_FONT = "/fonts/Arial-12.bdf"
 DISPLAY_STRING = "Button Text"
 
 # Make the display context
-splash = displayio.Group(max_size=20)
+splash = displayio.Group()
 display.show(splash)
 BUTTON_WIDTH = 80
 BUTTON_HEIGHT = 40
