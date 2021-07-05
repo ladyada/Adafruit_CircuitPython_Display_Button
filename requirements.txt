@@ -4,3 +4,5 @@
 
 Adafruit-Blinka
 adafruit-blinka-displayio
+adafruit-circuitpython-display-text
+adafruit-circuitpython-display-shapes
